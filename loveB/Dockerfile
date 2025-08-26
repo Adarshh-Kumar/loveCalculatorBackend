@@ -1,25 +1,16 @@
-# Stage 1: Build the app using Maven Wrapper
+# Build stage
 FROM eclipse-temurin:21-jdk AS build
-
 WORKDIR /app
 
-# Copy Maven wrapper files
-COPY mvnw .
-COPY .mvn .mvn
-
-# Copy the project files
+# Copy project files
 COPY pom.xml .
 COPY src ./src
 
-# Make mvnw executable
-RUN chmod +x ./mvnw
-
-# Build the app (skip tests to make it faster)
+# Build the application (skip tests to make it faster)
 RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Run the app
+# Run stage
 FROM eclipse-temurin:21-jdk
-
 WORKDIR /app
 
 # Copy the jar from the build stage
