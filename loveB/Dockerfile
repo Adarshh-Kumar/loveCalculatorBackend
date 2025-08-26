@@ -1,17 +1,15 @@
-# ---------- Build stage ----------
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
-
-# Copy everything and build the JAR
 COPY . .
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
 
-# ---------- Run stage ----------
-FROM eclipse-temurin:21-jre
-WORKDIR /app
+# Give execute permission to mvnw
+RUN chmod +x mvnw
 
-# Copy the built JAR from the build stage
-COPY --from=build /app/target/*.jar app.jar
+# Build the JAR
+RUN ./mvnw clean package -DskipTests
+
+# Copy JAR
+RUN cp target/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
