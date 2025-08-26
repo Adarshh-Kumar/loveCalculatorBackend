@@ -1,15 +1,29 @@
-FROM eclipse-temurin:21-jdk
+# Stage 1: Build the app using Maven Wrapper
+FROM eclipse-temurin:21-jdk AS build
+
 WORKDIR /app
-COPY . .
 
-# Give execute permission to mvnw
-RUN chmod +x mvnw
+# Copy Maven wrapper files
+COPY mvnw .
+COPY .mvn .mvn
 
-# Build the JAR
+# Copy the project files
+COPY pom.xml .
+COPY src ./src
+
+# Make mvnw executable
+RUN chmod +x ./mvnw
+
+# Build the app (skip tests to make it faster)
 RUN ./mvnw clean package -DskipTests
 
-# Copy JAR
-RUN cp target/*.jar app.jar
+# Stage 2: Run the app
+FROM eclipse-temurin:21-jdk
 
-EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+WORKDIR /app
+
+# Copy the jar from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Run the Spring Boot app
+ENTRYPOINT ["java", "-jar", "app.jar"]
