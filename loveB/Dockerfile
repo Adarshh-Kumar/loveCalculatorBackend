@@ -1,19 +1,19 @@
-# Use Eclipse Temurin JDK 21
+# Use Java 21 JDK
 FROM eclipse-temurin:21-jdk
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy Maven configuration first to leverage Docker cache
+# Copy Maven configuration first
 COPY pom.xml .
 
-# Copy source code
+# Copy the source code
 COPY src ./src
 
-# Build the project (skip tests for faster build)
+# Build the Spring Boot application
 RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
 
-# Expose default port
+# Expose port
 EXPOSE 8080
 
 # Run the Spring Boot JAR
