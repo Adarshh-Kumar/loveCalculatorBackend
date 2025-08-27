@@ -2,11 +2,14 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-# Copy project files
+# Copy ALL project files including Maven wrapper
 COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
 COPY src ./src
 
-# Build the application (skip tests to make it faster)
+# Make mvnw executable and build
+RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Run stage
