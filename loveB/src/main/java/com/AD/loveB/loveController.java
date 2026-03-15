@@ -12,7 +12,7 @@ public class loveController {
     private loveRepo repo;
 
     @Autowired
-    private serviceLove service; // Inject your service
+    private serviceLove service; // Inject service
 
     @PostMapping("/info")
     public String info(@RequestBody saver dto) {

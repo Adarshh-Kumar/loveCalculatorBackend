@@ -20,5 +20,4 @@ public class Fields {
     private String name1;
     private String name2;
     private int score;
-
 }

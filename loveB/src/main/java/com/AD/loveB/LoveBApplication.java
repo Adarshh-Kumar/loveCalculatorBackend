@@ -10,6 +10,5 @@ public class LoveBApplication {
 
 		SpringApplication.run(LoveBApplication.class, args);
 		System.out.println("heyy");
-
 	}
 }
